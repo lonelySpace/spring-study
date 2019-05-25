@@ -1,0 +1,12 @@
+模拟Spring解决循环依赖
+
+核心是earlySingltonCache，spring只能处理单例的循环依赖
+并且使用过set方法注入的依赖，如果是构造器注入的依赖则不能解决循环依赖
+因为Spring是通过Constructor.newInstance来进行实例话的。
+
+Spring解决循环依赖的主要思想
+1. 创建一个无属性的instance放入earlySingltenCache
+2. 从earlySingltenoCache获取属性实例，通过Method.invoke给bean设置依赖
+3. 将属性实例从earlySingltonCache中删除
+4. 这样bean的属性设置好了，属性所对应的bean也设置好了
+5. 最后把bean放入singltenCache中
